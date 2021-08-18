@@ -1,0 +1,35 @@
+name: 'Registry twitter bot'
+description: 'Action that tweets about new rules added to the registry'
+inputs:
+  event-data:
+    description: 'information about github event'
+    required: true
+    default: ''
+  github-api-token:
+    description: 'github api token'
+    required: true
+    default: ''
+  twitter-api-token:
+    description: 'twitter api token'
+    required: true
+    default: ''
+  web-app:
+    description: 'web app URL'
+    required: true
+    default: ''
+  web-app-key:
+    description: 'web app key'
+    required: true
+    default: ''
+outputs:
+  time:
+    description: 'finish time'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.event-data }}
+    - ${{ inputs.github-api-token }}
+    - ${{ inputs.twitter-api-token }}
+    - ${{ inputs.web-app }}
+    - ${{ inputs.web-app-key }}
