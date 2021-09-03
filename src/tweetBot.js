@@ -24,12 +24,11 @@ class TweetBot {
     return imgUrl.toString()
   }
 
-  async _sendTweet (title, message, imgUrl) {
+  async _sendTweet (message, imgUrl) {
     const response = await got.post(this.ifttUrl, {
       json: {
-        value1: title,
-        value2: message,
-        value3: imgUrl
+        value1: message,
+        value2: imgUrl
       }
     })
     return response.body
@@ -40,7 +39,7 @@ class TweetBot {
     const imgUrl = await this._saveImage(picture)
     // console.log(`image saved @ ${imgUrl}`)
     console.log(`tweeting ${title}`)
-    const result = await this._sendTweet(title, message, imgUrl)
+    const result = await this._sendTweet(message, imgUrl)
     console.log(`tweet result: ${result}`)
   }
 }
