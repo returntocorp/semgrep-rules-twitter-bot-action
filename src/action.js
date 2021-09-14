@@ -1,4 +1,12 @@
+const { readableLanguageName } = require('./utils')
+const ejs = require('ejs')
+const fs = require('fs')
+const path = require('path')
+
 async function twitterBotAction (event, rulesFetcher, imageGenerator, tweetBot) {
+  const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'message.txt'), 'utf8')
+  const msgTemplate = ejs.compile(templateContent)
+
   // fetching new rules
   const repo = event.repository.name
   const owner = event.repository.owner.name
@@ -13,18 +21,18 @@ async function twitterBotAction (event, rulesFetcher, imageGenerator, tweetBot) 
   // generating picture for tweet and posting it to Twitter
   for (let i = 0; i < rules.length; i++) {
     console.log(`creating picture for: ${rules[i].id}`)
-    const imgSettings = {
-      ruleId: rules[i].id,
-      message: rules[i].message,
-      lang: rules[i].languages[0]
-    }
-    const picture = await imageGenerator.produce(imgSettings)
-    const message = `New Rule in the Registry:
-🤖 ${rules[i].id} (https://semgrep.dev/r?q=${rules[i].registryId})
 
-📋 ${rules[i].message}`
-    console.log(`sending tweet for: ${rules[i].id}`)
-    await tweetBot.tweet(rules[i].id, message, picture)
+    const id = rules[i].id
+    const registryId = rules[i].registryId
+    const message = rules[i].message
+    const lang = readableLanguageName(rules[i].languages[0])
+
+    const imgSettings = { ruleId: id, message, lang }
+    const picture = await imageGenerator.produce(imgSettings)
+
+    const tweetMessage = msgTemplate({ id, message, lang, registryId })
+    console.log(`sending tweet for: ${registryId}`)
+    await tweetBot.tweet(id, tweetMessage, picture)
   }
 }
 

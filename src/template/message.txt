@@ -1,0 +1,4 @@
+New <%= lang %> rule in the Registry:
+🤖 <%= id %> (https://semgrep.dev/r?q=<%= registryId %>)
+
+📋 <%= message %>
