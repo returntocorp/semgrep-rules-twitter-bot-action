@@ -5,7 +5,8 @@ const action = require('./action')
 
 ;(async () => {
   // get event data and secrets
-  const event = JSON.parse(process.argv[2])
+  const rawEventData = String(process.argv[2]).replace(/\\\"/g,'"')
+  const event = JSON.parse(rawEventData)
   const githubToken = process.argv[3]
   const twitterToken = process.argv[4]
   const webAppUrl = process.argv[5]
