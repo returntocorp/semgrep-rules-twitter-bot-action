@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer')
 const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
+const { languageIcon } = require('./utils')
 
 class ImageGenerator {
   async init () {
@@ -28,7 +29,13 @@ class ImageGenerator {
       await this.init()
     }
     const { ruleId, message, lang } = ruleMetaData
-    const html = this.template({ id: ruleId, message, lang })
+    const icon = await languageIcon(lang)
+    const html = this.template({
+      id: ruleId,
+      languageIcon: icon,
+      message,
+      lang
+    })
     const page = await this.browser.newPage()
     await page.setViewport({
       width: 1200,
