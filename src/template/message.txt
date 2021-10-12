@@ -1,5 +1,6 @@
 🎃 Happy #Hacktoberfest
 🎃 Want to contribute to FOSS? 👉 https://github.com/returntocorp/semgrep-rules/blob/develop/HACKTOBERFEST2021.md
+
 New <%= lang %> rule in the Registry:
 🤖 <%= id %> (https://semgrep.dev/r?q=<%= registryId %>)
 
