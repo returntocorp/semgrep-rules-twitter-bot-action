@@ -8,6 +8,7 @@ function readableLanguageName (lang) {
     case 'javascript': return 'JavaScript'
     case 'ts':
     case 'typescript': return 'TypeScript'
+    case 'kt': return 'Kotlin'
     default: return lang
   }
 }
