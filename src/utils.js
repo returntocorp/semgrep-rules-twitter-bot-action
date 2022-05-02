@@ -3,13 +3,14 @@ function readableLanguageName (lang) {
     return ''
   }
 
-  switch (String(lang).toLowerCase()) {
+  switch (lang.toLowerCase()) {
     case 'js':
     case 'javascript': return 'JavaScript'
     case 'ts':
     case 'typescript': return 'TypeScript'
     case 'kt': return 'Kotlin'
-    default: return lang
+    case 'csharp': return 'C#'
+    default: return lang.charAt(0).toUpperCase() + lang.slice(1)
   }
 }
 
