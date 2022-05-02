@@ -38,7 +38,8 @@ class RulesFetcher {
           continue
         }
         const contentsUrl = new URL(newYamlFiles[i].contents_url)
-        const idParts = contentsUrl.pathname.split('contents/')[1].replace(/\.yaml/g, '').replace(/\.yml/g, '').split('/')
+        const ids = decodeURIComponent(contentsUrl.pathname).split('contents/')[1]
+        const idParts = ids.replace(/\.yaml/g, '').replace(/\.yml/g, '').split('/')
         rules = rules.map(rule => {
           rule.registryId = [...idParts, rule.id].join('.')
           return rule
