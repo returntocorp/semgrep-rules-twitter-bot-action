@@ -1,4 +1,5 @@
 const { readFile } = require('fs').promises
+const { resolve } = require('path')
 
 function readableLanguageName (lang) {
   if (!lang) {
@@ -14,26 +15,35 @@ function readableLanguageName (lang) {
   }
 }
 
+async function readIconContent (iconPath) {
+  return await readFile(resolve(__dirname, iconPath), { encoding: 'utf8' })
+}
+
 async function languageIcon (lang) {
   if (!lang) {
     return ''
   }
 
   switch (String(lang).toLowerCase()) {
-    case 'c': return await readFile('./templates/icons/clang.svg', { encoding: 'utf8' })
-    case 'csharp': return await readFile('./templates/icons/csharp.svg', { encoding: 'utf8' })
-    case 'go': return await readFile('./templates/icons/golang.svg', { encoding: 'utf8' })
-    case 'java': return await readFile('./templates/icons/java.svg', { encoding: 'utf8' })
-    case 'javascript': return await readFile('./templates/icons/javascript.svg', { encoding: 'utf8' })
-    case 'typescript': return await readFile('./templates/icons/typescript.svg', { encoding: 'utf8' })
+    case 'bash': return await readIconContent('./template/icons/bash.svg')
+    case 'c': return await readIconContent('./template/icons/clang.svg')
+    case 'c#': return await readIconContent('./template/icons/csharp.svg')
+    case 'dockerfile': return await readIconContent('./template/icons/docker.svg')
+    case 'go': return await readIconContent('./template/icons/go.svg')
+    case 'java': return await readIconContent('./template/icons/java.svg')
+    case 'javascript': return await readIconContent('./template/icons/javascript.svg')
+    case 'typescript': return await readIconContent('./template/icons/typescript.svg')
+    case 'kotlin': return await readIconContent('./template/icons/kotlin.svg')
+    case 'ocaml': return await readIconContent('./template/icons/ocaml.svg')
+    case 'php': return await readIconContent('./template/icons/php.svg')
+    case 'python': return await readIconContent('./template/icons/python.svg')
+    case 'ruby': return await readIconContent('./template/icons/ruby.svg')
+    case 'scala': return await readIconContent('./template/icons/scala.svg')
+    case 'terraform': return await readIconContent('./template/icons/terraform.svg')
     case 'json':
-    case 'kotlin':
-    case 'ocaml':
-    case 'php':
-    case 'python':
-    case 'ruby':
+    case 'yaml':
     case 'generic':
-    default: return ''
+    default: return await readIconContent('./template/icons/generic.svg')
   }
 }
 
