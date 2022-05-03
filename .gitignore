@@ -1,2 +1,4 @@
 /src/node_modules/
 /.vscode/
+/src/template/index_tmp.html
+/src/test/*.png
