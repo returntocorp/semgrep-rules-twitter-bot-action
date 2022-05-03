@@ -2,11 +2,14 @@ const puppeteer = require('puppeteer')
 const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
+const marked = require('marked')
 const { languageIcon } = require('./utils')
+const { readableLanguageName } = require('./utils')
 
 class ImageGenerator {
   async init () {
-    const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index.html'), 'utf8')
+    // const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index.html'), 'utf8')
+    const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index_tmp.html'), 'utf8')
     this.template = ejs.compile(templateContent)
     this.browser = await puppeteer.launch({
       headless: true,
@@ -28,14 +31,18 @@ class ImageGenerator {
     if (!this.browser) {
       await this.init()
     }
-    const { ruleId, message, lang } = ruleMetaData
+    const { id, message, lang, vuln, user } = ruleMetaData
     const icon = await languageIcon(lang)
     const html = this.template({
-      id: ruleId,
+      id,
       languageIcon: icon,
-      message,
-      lang
+      userName: (user && user.name) || '',
+      vulnTitle: (vuln && vuln.title) || '',
+      vulnType: (vuln && vuln.type) || '',
+      message: marked.parseInline(message),
+      lang: readableLanguageName(lang)
     })
+
     const page = await this.browser.newPage()
     await page.setViewport({
       width: 1200,

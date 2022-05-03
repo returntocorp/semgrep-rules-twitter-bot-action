@@ -1,4 +1,3 @@
-const { readableLanguageName } = require('./utils')
 const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
@@ -25,9 +24,9 @@ async function twitterBotAction (event, rulesFetcher, imageGenerator, tweetBot) 
     const id = rules[i].id
     const registryId = rules[i].registryId
     const message = rules[i].message
-    const lang = readableLanguageName(rules[i].languages[0])
+    const lang = rules[i].languages[0]
 
-    const imgSettings = { ruleId: id, message, lang }
+    const imgSettings = { id, message, lang }
     const picture = await imageGenerator.produce(imgSettings)
 
     const tweetMessage = msgTemplate({ id, message, lang, registryId })

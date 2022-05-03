@@ -13,6 +13,9 @@ function readableLanguageName (lang) {
     case 'typescript': return 'TypeScript'
     case 'kt': return 'Kotlin'
     case 'csharp': return 'C#'
+    case 'yaml': return 'YAML'
+    case 'json': return 'JSON'
+    case 'php': return 'PHP'
     default: return lang.charAt(0).toUpperCase() + lang.slice(1)
   }
 }
@@ -29,12 +32,16 @@ async function languageIcon (lang) {
   switch (String(lang).toLowerCase()) {
     case 'bash': return await readIconContent('./template/icons/bash.svg')
     case 'c': return await readIconContent('./template/icons/clang.svg')
+    case 'csharp':
     case 'c#': return await readIconContent('./template/icons/csharp.svg')
     case 'dockerfile': return await readIconContent('./template/icons/docker.svg')
     case 'go': return await readIconContent('./template/icons/go.svg')
     case 'java': return await readIconContent('./template/icons/java.svg')
+    case 'js':
     case 'javascript': return await readIconContent('./template/icons/javascript.svg')
+    case 'ts':
     case 'typescript': return await readIconContent('./template/icons/typescript.svg')
+    case 'kt':
     case 'kotlin': return await readIconContent('./template/icons/kotlin.svg')
     case 'ocaml': return await readIconContent('./template/icons/ocaml.svg')
     case 'php': return await readIconContent('./template/icons/php.svg')
