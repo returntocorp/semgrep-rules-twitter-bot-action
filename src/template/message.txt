@@ -1,4 +1,4 @@
-New <%= lang %> rule in the Registry:
+New <%= lang %> rule <% if (userName) { %>by <%= userName %><% if (userLink) {%> (<%=userLink%>)<%} %><% } else { %>in the Registry<%} %>:
 🤖 <%= id %> (https://semgrep.dev/r?q=<%= registryId %>)
-
+#️⃣ <% if (Array.isArray(technology)) { technology.forEach(t => { %><%=' '%>#<%=t%><%}) } %>
 📋 <%= message %>

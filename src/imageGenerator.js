@@ -3,13 +3,11 @@ const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
 const marked = require('marked')
-const { languageIcon } = require('./utils')
-const { readableLanguageName } = require('./utils')
+const { technologyInfo, getVulnerabilityInfo } = require('./utils')
 
 class ImageGenerator {
   async init () {
-    // const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index.html'), 'utf8')
-    const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index_tmp.html'), 'utf8')
+    const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'index.html'), 'utf8')
     this.template = ejs.compile(templateContent)
     this.browser = await puppeteer.launch({
       headless: true,
@@ -27,20 +25,23 @@ class ImageGenerator {
     }
   }
 
-  async produce (ruleMetaData) {
+  async produce (rule) {
     if (!this.browser) {
       await this.init()
     }
-    const { id, message, lang, vuln, user } = ruleMetaData
-    const icon = await languageIcon(lang)
+    const { id, message, languages, contributor, metadata } = rule
+    const lang = languages[0]
+
+    const vuln = getVulnerabilityInfo(rule)
+    const { icon, name } = await technologyInfo(lang, metadata && metadata.technology)
     const html = this.template({
       id,
       languageIcon: icon,
-      userName: (user && user.name) || '',
+      userName: (contributor && contributor.name) || '',
       vulnTitle: (vuln && vuln.title) || '',
       vulnType: (vuln && vuln.type) || '',
       message: marked.parseInline(message),
-      lang: readableLanguageName(lang)
+      lang: name
     })
 
     const page = await this.browser.newPage()
