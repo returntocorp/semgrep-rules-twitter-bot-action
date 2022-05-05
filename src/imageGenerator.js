@@ -2,6 +2,8 @@ const puppeteer = require('puppeteer')
 const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
+const marked = require('marked')
+const { technologyInfo, getVulnerabilityInfo } = require('./utils')
 
 class ImageGenerator {
   async init () {
@@ -23,12 +25,25 @@ class ImageGenerator {
     }
   }
 
-  async produce (ruleMetaData) {
+  async produce (rule) {
     if (!this.browser) {
       await this.init()
     }
-    const { ruleId, message, lang } = ruleMetaData
-    const html = this.template({ id: ruleId, message, lang })
+    const { id, message, languages, contributor, metadata } = rule
+    const lang = languages[0]
+
+    const vuln = getVulnerabilityInfo(rule)
+    const { icon, name } = await technologyInfo(lang, metadata && metadata.technology)
+    const html = this.template({
+      id,
+      languageIcon: icon,
+      userName: (contributor && contributor.name) || '',
+      vulnTitle: (vuln && vuln.title) || '',
+      vulnType: (vuln && vuln.type) || '',
+      message: marked.parseInline(message),
+      lang: name
+    })
+
     const page = await this.browser.newPage()
     await page.setViewport({
       width: 1200,

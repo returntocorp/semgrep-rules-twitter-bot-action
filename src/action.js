@@ -1,7 +1,7 @@
-const { readableLanguageName } = require('./utils')
 const ejs = require('ejs')
 const fs = require('fs')
 const path = require('path')
+const { readableLanguageName } = require('./utils')
 
 async function twitterBotAction (event, rulesFetcher, imageGenerator, tweetBot) {
   const templateContent = await fs.promises.readFile(path.join(__dirname, 'template/', 'message.txt'), 'utf8')
@@ -21,18 +21,17 @@ async function twitterBotAction (event, rulesFetcher, imageGenerator, tweetBot) 
   // generating picture for tweet and posting it to Twitter
   for (let i = 0; i < rules.length; i++) {
     console.log(`creating picture for: ${rules[i].id}`)
-
-    const id = rules[i].id
-    const registryId = rules[i].registryId
-    const message = rules[i].message
-    const lang = readableLanguageName(rules[i].languages[0])
-
-    const imgSettings = { ruleId: id, message, lang }
-    const picture = await imageGenerator.produce(imgSettings)
-
-    const tweetMessage = msgTemplate({ id, message, lang, registryId })
-    console.log(`sending tweet for: ${registryId}`)
-    await tweetBot.tweet(id, tweetMessage, picture)
+    const picture = await imageGenerator.produce(rules[i])
+    const tweetMessage = msgTemplate({
+      lang: readableLanguageName(rules[i].languages[0]),
+      message: rules[i].message,
+      id: rules[i].id,
+      technology: (rules[i].metadata && rules[i].metadata.technology),
+      userName: rules[i].contributor && rules[i].contributor.name,
+      userLink: rules[i].contributor && rules[i].contributor.url
+    })
+    console.log(`sending tweet for: ${rules[i].registryId}`)
+    await tweetBot.tweet(rules[i].id, tweetMessage, picture)
   }
 }
 
