@@ -42,7 +42,8 @@ class RulesFetcher {
     return {
       login: author.login,
       url: author.html_url,
-      name: commit.author.name
+      name: commit.author.name,
+      avatarUrl: author.avatar_url
     }
   }
 
