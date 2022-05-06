@@ -156,7 +156,7 @@ function getVulnerabilityInfo (rule) {
     const owaspMessage = Array.isArray(owasp) ? owasp[0] : owasp
     let match = owaspMessage.match(/^(A0?[1-9]|10):\s(.+)$/)
     if (match) {
-      return { type: match[1], title: match[2].trim() }
+      return { type: `OWASP ${match[1]}`, title: match[2].trim() }
     } else {
       match = owaspMessage.match(/.*(A[01][0-9]:[0-9]{4})\s+(.*)$/)
       if (match) {
@@ -164,7 +164,7 @@ function getVulnerabilityInfo (rule) {
         if (title[0] === '-') {
           title = title.slice(1).trim()
         }
-        return { type: match[1], title }
+        return { type: `OWASP ${match[1]}`, title }
       }
     }
   }
