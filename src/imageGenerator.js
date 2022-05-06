@@ -38,6 +38,7 @@ class ImageGenerator {
       id,
       languageIcon: icon,
       userName: (contributor && contributor.name) || '',
+      userAvatar: (contributor && contributor.avatarUrl) || '',
       vulnTitle: (vuln && vuln.title) || '',
       vulnType: (vuln && vuln.type) || '',
       message: marked.parseInline(message),

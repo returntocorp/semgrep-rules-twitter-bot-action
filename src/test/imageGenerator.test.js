@@ -43,3 +43,26 @@ test('ImageGenerator: should fail without rule id and message', async (t) => {
   t.equal(!!(error), true)
   t.end()
 })
+
+test('ImageGenerator: should generate image with contributor', async (t) => {
+  const imageGenerator = new ImageGenerator()
+  const rule = {
+    id: 'test-id',
+    languages: ['js'],
+    message: 'Hello world',
+    metadata: {
+      cwe: 'CWE-123: Vulnerability',
+      technology: ['tape']
+    },
+    contributor: {
+      login: 'inkz',
+      url: 'https://github.com/inkz',
+      name: 'inkz inkz',
+      avatarUrl: 'https://avatars.githubusercontent.com/u/2299241?v=4'
+    }
+  }
+  const picture = await imageGenerator.produce(rule)
+  await imageGenerator.close()
+  t.equal(!!(picture), true)
+  t.end()
+})
